@@ -1,5 +1,5 @@
 'use client'
-import { getReportStats } from '@/app/(actions)/actions'
+import { getReportStats, changeReportStatus } from '@/app/(actions)/actions'
 import { ReportProps, ReportStatProps, ReportStatusProps } from '@/types'
 import React, { useEffect, useState, useMemo } from 'react'
 import { toast } from 'sonner'
@@ -38,10 +38,17 @@ import {
     Eye,
     Share2,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    RefreshCw
 } from 'lucide-react'
 import AddCategoryForm from '@/components/AddCategoryForm'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 const statusConfig: Record<ReportStatusProps, { label: string; color: string }> = {
     SUBMITTED: { label: 'Soumis', color: 'bg-blue-500 hover:bg-blue-600' },
@@ -57,7 +64,21 @@ const DashboardPage = () => {
     const [statusFilter, setStatusFilter] = useState<string>('all')
     const [categoryFilter, setCategoryFilter] = useState<string>('all')
     const [currentPage, setCurrentPage] = useState<number>(1)
+    const [updatingStatus, setUpdatingStatus] = useState<string | null>(null)
     const itemsPerPage = 6
+
+    const handleStatusChange = async (reportId: string, newStatus: ReportStatusProps) => {
+        try {
+            setUpdatingStatus(reportId)
+            await changeReportStatus(reportId, newStatus)
+            toast.success("Statut mis à jour avec succès")
+            await fetchData()
+        } catch (error) {
+            toast.error("Erreur lors de la mise à jour du statut")
+        } finally {
+            setUpdatingStatus(null)
+        }
+    }
 
     const fetchData = async () => {
         try {
@@ -385,9 +406,63 @@ const DashboardPage = () => {
                                                     </Badge>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Badge className={`${statusConfig[report.status].color} text-white border-0`}>
-                                                        {statusConfig[report.status].label}
-                                                    </Badge>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                className={`h-7 px-3 ${statusConfig[report.status].color} text-white hover:text-white transition-all`}
+                                                                disabled={updatingStatus === report.id}
+                                                            >
+                                                                {updatingStatus === report.id ? (
+                                                                    <RefreshCw className="h-4 w-4 animate-spin" />
+                                                                ) : (
+                                                                    statusConfig[report.status].label
+                                                                )}
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent className="w-48 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusChange(report.id, 'SUBMITTED')}
+                                                                className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                                                                disabled={report.status === 'SUBMITTED'}
+                                                            >
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="h-2 w-2 rounded-full bg-blue-500" />
+                                                                    <span className="text-zinc-900 dark:text-zinc-100">Soumis</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusChange(report.id, 'IN_PROGRESS')}
+                                                                className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                                                                disabled={report.status === 'IN_PROGRESS'}
+                                                            >
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="h-2 w-2 rounded-full bg-yellow-500" />
+                                                                    <span className="text-zinc-900 dark:text-zinc-100">En cours</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusChange(report.id, 'RESOLVED')}
+                                                                className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                                                                disabled={report.status === 'RESOLVED'}
+                                                            >
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="h-2 w-2 rounded-full bg-green-500" />
+                                                                    <span className="text-zinc-900 dark:text-zinc-100">Résolu</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                onClick={() => handleStatusChange(report.id, 'REJECTED')}
+                                                                className="cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-800 focus:bg-zinc-100 dark:focus:bg-zinc-800"
+                                                                disabled={report.status === 'REJECTED'}
+                                                            >
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="h-2 w-2 rounded-full bg-red-500" />
+                                                                    <span className="text-zinc-900 dark:text-zinc-100">Rejeté</span>
+                                                                </div>
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
                                                 </TableCell>
                                                 <TableCell className="text-zinc-600 dark:text-zinc-400">
                                                     {report.date ? new Date(report.date).toLocaleDateString('fr-FR', {

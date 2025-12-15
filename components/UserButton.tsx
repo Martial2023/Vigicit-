@@ -43,7 +43,7 @@ export function UserButton() {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className="focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-300 dark:focus-visible:ring-zinc-700 rounded-full transition-all hover:opacity-80">
+                <button className="focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-zinc-300 dark:focus-visible:ring-zinc-700 rounded-full transition-all hover:opacity-80 cursor-pointer">
                     <Avatar className="h-9 w-9 border-2 border-zinc-200 dark:border-zinc-800">
                         <AvatarImage
                             src={user?.image || ""}

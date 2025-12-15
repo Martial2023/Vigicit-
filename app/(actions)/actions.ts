@@ -254,3 +254,46 @@ export async function addReportCategory(data: AddCategoryData): Promise<ReportCa
         throw new Error("Erreur lors de l'ajout de la catégorie de signalement");
     }
 }
+
+export async function changeReportStatus(reportId: string, newStatus: ReportStatusProps): Promise<ReportProps> {
+    try {
+        const connectedUser = await getUser()
+        if (!connectedUser || !connectedUser.role || connectedUser.role !== 'ADMIN') {
+            throw new Error("Utilisateur non autorisé");
+        }
+
+        if (!reportId || !newStatus) {
+            throw new Error("Données invalides");
+        }
+
+        const report = await prisma.report.update({
+            where: {
+                id: reportId
+            },
+            data: {
+                status: newStatus
+            },
+            include: {
+                category: true,
+                user: true
+            }
+        })
+
+        return {
+            ...report,
+            categoryName: report.category.name,
+            geoLocation: {
+                latitude: Number(report.geoLocation[0]),
+                longitude: Number(report.geoLocation[1])
+            },
+            user: {
+                userName: report.user?.name || '',
+                email: report.user?.email || '',
+                image: report.user?.image || null
+            }
+        }
+    } catch (error) {
+        console.log("Erreur lors du changement de statut du signalement :", error);
+        throw new Error("Erreur lors du changement de statut du signalement");
+    }
+}
