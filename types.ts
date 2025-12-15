@@ -64,3 +64,10 @@ export interface ReportCategoryProps {
     name: string;
     description: string | null;
 }
+
+export const statusConfig: Record<ReportStatusProps, { label: string, color: string }> = {
+    SUBMITTED: { label: 'Soumis', color: 'bg-blue-500 hover:bg-blue-600' },
+    IN_PROGRESS: { label: 'En cours', color: 'bg-yellow-500 hover:bg-yellow-600' },
+    RESOLVED: { label: 'Résolu', color: 'bg-green-500 hover:bg-green-600' },
+    REJECTED: { label: 'Rejeté', color: 'bg-red-500 hover:bg-red-600' }
+}

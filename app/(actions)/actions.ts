@@ -78,6 +78,28 @@ export async function getUserReports(): Promise<ReportProps[]> {
     }
 }
 
+export async function getReports(): Promise<ReportProps[]> {
+    try {
+        const reports = await prisma.report.findMany({
+            include: {
+                category: true
+            }
+        })
+        const userReports = reports.map((report) => ({
+            ...report,
+            categoryName: report.category.name,
+            geoLocation: {
+                latitude: Number(report.geoLocation[0]),
+                longitude: Number(report.geoLocation[1])
+            }
+        }))
+        return userReports
+    } catch (error) {
+        console.log("Erreur lors de la récupération des signalements de l'utilisateur :", error);
+        throw new Error('Erreur lors de la récupération des signalements de l\'utilisateur');
+    }
+}
+
 export async function getReportById(reportId: string): Promise<ReportWithCommentsProps | null> {
     try {
         if (!reportId) {

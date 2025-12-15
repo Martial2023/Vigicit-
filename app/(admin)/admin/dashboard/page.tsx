@@ -278,11 +278,6 @@ const DashboardPage = () => {
                                 className="w-full h-full"
                             />
                         </div>
-                        <div className="mt-4">
-                            <Button className="bg-blue-500 hover:bg-blue-600">
-                                Données en temps réel
-                            </Button>
-                        </div>
                     </CardContent>
                 </Card>
 

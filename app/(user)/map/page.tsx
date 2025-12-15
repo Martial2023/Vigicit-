@@ -1,20 +1,28 @@
 'use client'
-import { getUserReports } from '@/app/(actions)/actions'
-import { ReportProps, ReportStatusProps, statusConfig } from '@/types'
-import React, { useEffect, useState, useMemo } from 'react'
-import { toast } from 'sonner'
+import { getReports } from '@/app/(actions)/actions'
+import MinLoader from '@/components/MinLoader'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Plus, Eye, Edit, Share2, Calendar, MapPin, Loader2 } from 'lucide-react'
+import { ReportProps, statusConfig } from '@/types'
+import { Calendar, Eye, MapPin, Plus, Share2 } from 'lucide-react'
 import Link from 'next/link'
+import React, { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
 import Image from 'next/image'
-import MinLoader from '@/components/MinLoader'
+import dynamic from 'next/dynamic'
 
+const Map = dynamic(() => import('@/components/Map'), { 
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-900">
+            <MinLoader />
+        </div>
+    )
+})
 
-
-const MyReportsPage = () => {
+const page = () => {
     const [reports, setReports] = useState<ReportProps[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [statusFilter, setStatusFilter] = useState<string>('all')
@@ -23,7 +31,7 @@ const MyReportsPage = () => {
     const fetchReports = async () => {
         try {
             setLoading(true)
-            const response = await getUserReports()
+            const response = await getReports()
             setReports(response)
         } catch (error) {
             toast.error("Erreur lors de la récupération des signalements.")
@@ -38,7 +46,7 @@ const MyReportsPage = () => {
 
     const filteredAndSortedReports = useMemo(() => {
         let filtered = [...reports]
-        
+
         // Filtrage par statut
         if (statusFilter !== 'all') {
             filtered = filtered.filter(report => report.status === statusFilter)
@@ -50,7 +58,7 @@ const MyReportsPage = () => {
             if (!b.date) return -1
             const dateA = new Date(a.date).getTime()
             const dateB = new Date(b.date).getTime()
-            
+
             if (sortBy === 'date-desc') return dateB - dateA
             if (sortBy === 'date-asc') return dateA - dateB
             return 0
@@ -95,16 +103,14 @@ const MyReportsPage = () => {
             </main>
         )
     }
-
     return (
         <main className='min-h-screen py-12'>
-            {/* Header */}
             <div className="bg-white dark:bg-zinc-800 border-b">
                 <div className="container mx-auto px-4 py-6 md:py-8">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
                             <h1 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
-                                Mes Signalements
+                                Signalements
                             </h1>
                             <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
                                 {reports.length} signalement{reports.length > 1 ? 's' : ''} au total
@@ -156,7 +162,20 @@ const MyReportsPage = () => {
                 </div>
             </div>
 
-            {/* Liste des signalements */}
+            <div className='container mx-auto px-4 py-6 md:py-8'>
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4">
+                    Carte des Signalements
+                </h2>
+
+                <div className="w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden border border-zinc-200 dark:border-zinc-800">
+                    <Map
+                        coordinates={reports.map(r => r.geoLocation)}
+                        zoom={6}
+                        className="w-full h-full"
+                    />
+                </div>
+            </div>
+
             <div className="container mx-auto px-4 py-6 md:py-8">
                 {filteredAndSortedReports.length === 0 ? (
                     <div className="text-center py-16">
@@ -167,7 +186,7 @@ const MyReportsPage = () => {
                             Aucun signalement trouvé
                         </h3>
                         <p className="text-zinc-600 dark:text-zinc-400 mb-6">
-                            {statusFilter !== 'all' 
+                            {statusFilter !== 'all'
                                 ? "Aucun signalement ne correspond à ce filtre."
                                 : "Vous n'avez pas encore créé de signalement."}
                         </p>
@@ -191,7 +210,7 @@ const MyReportsPage = () => {
                                             <Image
                                                 src={report.images && report.images.length > 0
                                                     ? report.images[0]
-                                                    : '/img1.png' 
+                                                    : '/img1.png'
                                                 }
                                                 alt={report.title}
                                                 fill
@@ -203,7 +222,7 @@ const MyReportsPage = () => {
                                                 <MapPin className="h-12 w-12 text-zinc-400" />
                                             </div>
                                         )}
-                                        
+
                                         {/* Badge de statut */}
                                         <div className="absolute top-3 right-3">
                                             <Badge className={`${statusConfig[report.status].color} text-white border-0`}>
@@ -217,7 +236,7 @@ const MyReportsPage = () => {
                                         <h3 className="font-semibold text-lg text-zinc-900 dark:text-white mb-2 line-clamp-1">
                                             {report.title}
                                         </h3>
-                                        
+
                                         <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-3">
                                             {formatDate(report.date)}
                                         </p>
@@ -229,9 +248,9 @@ const MyReportsPage = () => {
                                 </CardContent>
 
                                 <CardFooter className="p-4 pt-0 flex gap-2">
-                                    <Button 
-                                        variant="outline" 
-                                        size="sm" 
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
                                         className="flex-1"
                                         asChild
                                     >
@@ -240,8 +259,8 @@ const MyReportsPage = () => {
                                             Voir
                                         </Link>
                                     </Button>
-                                    <Button 
-                                        variant="outline" 
+                                    <Button
+                                        variant="outline"
                                         size="sm"
                                         onClick={() => handleShare(report)}
                                     >
@@ -257,4 +276,4 @@ const MyReportsPage = () => {
     )
 }
 
-export default MyReportsPage
+export default page
