@@ -37,6 +37,11 @@ export interface ReportProps {
     images: string[];
     status: ReportStatusProps;
     userId: string;
+    user: {
+        userName: string;
+        email: string;
+        image: string | null;
+    } | null;
 }
 
 export interface CommentProps {

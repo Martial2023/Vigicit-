@@ -20,7 +20,7 @@ import {
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
-const Map = dynamic(() => import('@/components/Map'), { 
+const Map = dynamic(() => import('@/components/Map'), {
     ssr: false,
     loading: () => (
         <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-900">
@@ -41,6 +41,7 @@ import {
     ChevronRight
 } from 'lucide-react'
 import AddCategoryForm from '@/components/AddCategoryForm'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 const statusConfig: Record<ReportStatusProps, { label: string; color: string }> = {
     SUBMITTED: { label: 'Soumis', color: 'bg-blue-500 hover:bg-blue-600' },
@@ -342,7 +343,8 @@ const DashboardPage = () => {
                             <Table>
                                 <TableHeader className="bg-zinc-100 dark:bg-zinc-900">
                                     <TableRow>
-                                        <TableHead className="font-semibold">ID</TableHead>
+                                        <TableHead className="font-semibold">Déclarant</TableHead>
+                                        <TableHead className="font-semibold">Profil</TableHead>
                                         <TableHead className="font-semibold">Titre</TableHead>
                                         <TableHead className="font-semibold">Catégorie</TableHead>
                                         <TableHead className="font-semibold">Statut</TableHead>
@@ -361,7 +363,18 @@ const DashboardPage = () => {
                                         paginatedReports.map((report) => (
                                             <TableRow key={report.id}>
                                                 <TableCell className="font-mono text-xs text-zinc-600 dark:text-zinc-400">
-                                                    {report.id.slice(0, 8)}
+                                                    <Avatar className="h-9 w-9 border-2 border-zinc-200 dark:border-zinc-800">
+                                                        <AvatarImage
+                                                            src={report?.user?.image || ""}
+                                                            alt={report?.user?.userName || "user"}
+                                                        />
+                                                        <AvatarFallback className="font-semibold">
+                                                            {report?.user?.userName?.charAt(0).toUpperCase()}
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                </TableCell>
+                                                <TableCell className="font-mono text-xs text-zinc-600 dark:text-zinc-400">
+                                                    {report?.user?.userName}
                                                 </TableCell>
                                                 <TableCell className="font-medium text-zinc-900 dark:text-white">
                                                     {report.title}

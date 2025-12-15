@@ -60,7 +60,8 @@ export async function getUserReports(): Promise<ReportProps[]> {
                 userId: user.id
             },
             include: {
-                category: true
+                category: true,
+                user: true
             }
         })
         const userReports = reports.map((report) => ({
@@ -69,6 +70,11 @@ export async function getUserReports(): Promise<ReportProps[]> {
             geoLocation: {
                 latitude: Number(report.geoLocation[0]),
                 longitude: Number(report.geoLocation[1])
+            },
+            user: {
+                userName: report.user?.name || '',
+                email: report.user?.email || '',
+                image: report.user?.image || null
             }
         }))
         return userReports
@@ -82,7 +88,8 @@ export async function getReports(): Promise<ReportProps[]> {
     try {
         const reports = await prisma.report.findMany({
             include: {
-                category: true
+                category: true,
+                user: true
             }
         })
         const userReports = reports.map((report) => ({
@@ -91,6 +98,11 @@ export async function getReports(): Promise<ReportProps[]> {
             geoLocation: {
                 latitude: Number(report.geoLocation[0]),
                 longitude: Number(report.geoLocation[1])
+            },
+            user: {
+                userName: report.user?.name || '',
+                email: report.user?.email || '',
+                image: report.user?.image || null
             }
         }))
         return userReports
@@ -110,6 +122,7 @@ export async function getReportById(reportId: string): Promise<ReportWithComment
                 id: reportId
             },
             include: {
+                user: true,
                 category: true,
                 comments: {
                     include: {
@@ -132,7 +145,12 @@ export async function getReportById(reportId: string): Promise<ReportWithComment
                 ...comment,
                 user: comment.user.name,
                 userImage: comment.user.image
-            }))
+            })),
+            user: {
+                userName: report.user?.name || '',
+                email: report.user?.email || '',
+                image: report.user?.image || null
+            }
         }
     } catch (error) {
         console.log("Erreur lors de la récupération du signalement :", error);
@@ -144,10 +162,10 @@ export async function getReportById(reportId: string): Promise<ReportWithComment
 export async function commentReport(reportId: string, content: string): Promise<CommentProps> {
     try {
         const connectedUser = await getUser()
-        if(!connectedUser){
+        if (!connectedUser) {
             throw new Error("Utilisateur non authentifié");
         }
-        if(!reportId || !content.trim()){
+        if (!reportId || !content.trim()) {
             throw new Error("Données de commentaire invalides");
         }
         const comment = await prisma.comment.create({
@@ -172,13 +190,14 @@ export async function commentReport(reportId: string, content: string): Promise<
 export async function getReportStats(): Promise<ReportStatProps> {
     try {
         const connectedUser = await getUser()
-        if(!connectedUser || !connectedUser.role || connectedUser.role !== 'ADMIN'){
+        if (!connectedUser || !connectedUser.role || connectedUser.role !== 'ADMIN') {
             throw new Error("Utilisateur non autorisé");
         }
 
         const reports = await prisma.report.findMany({
             include: {
-                category: true
+                category: true,
+                user: true
             }
         })
 
@@ -188,6 +207,11 @@ export async function getReportStats(): Promise<ReportStatProps> {
             geoLocation: {
                 latitude: Number(report.geoLocation[0]),
                 longitude: Number(report.geoLocation[1])
+            },
+            user: {
+                userName: report.user?.name || '',
+                email: report.user?.email || '',
+                image: report.user?.image || null
             }
         }));
 
@@ -214,7 +238,7 @@ type AddCategoryData = {
 export async function addReportCategory(data: AddCategoryData): Promise<ReportCategoryProps> {
     try {
         const connectedUser = await getUser()
-        if(!connectedUser || !connectedUser.role || connectedUser.role !== 'ADMIN'){
+        if (!connectedUser || !connectedUser.role || connectedUser.role !== 'ADMIN') {
             throw new Error("Utilisateur non autorisé");
         }
 
