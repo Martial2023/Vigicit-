@@ -175,7 +175,7 @@ const RecentSection = () => {
                     >
                         <Image
                             className="md:block rounded-lg"
-                            src={"/camion.png"}
+                            src={"/camion.jpg"}
                             alt="Hero Image"
                             width={70}
                             height={70}
