@@ -49,7 +49,7 @@ export function UserButton() {
                             src={user?.image || ""}
                             alt={user?.name || "user"}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold">
+                        <AvatarFallback className="font-semibold">
                             {user?.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
