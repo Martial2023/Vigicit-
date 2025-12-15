@@ -82,7 +82,7 @@ const RecentSection = () => {
                     >
                         <Image
                             className="md:block rounded-lg"
-                            src={"/img1.png"}
+                            src={"/nid.jpg"}
                             alt="Hero Image"
                             width={70}
                             height={70}
@@ -113,14 +113,14 @@ const RecentSection = () => {
                     >
                         <Image
                             className="md:block rounded-lg"
-                            src={"/img1.png"}
+                            src={"/ordures.jpg"}
                             alt="Hero Image"
                             width={70}
                             height={70}
                         />
 
                         <div>
-                            <h4 className='font-semibold'>Nids de poule</h4>
+                            <h4 className='font-semibold'>Dépots sauvages d&apos;ordures</h4>
                             <div className='flex items-center justify-between gap-4'>
                                 <div className='flex items-center text-sm'>
                                     <MapPin className='size-3 text-primary mr-2' />
@@ -144,18 +144,18 @@ const RecentSection = () => {
                     >
                         <Image
                             className="md:block rounded-lg"
-                            src={"/img1.png"}
+                            src={"/cars.jpg"}
                             alt="Hero Image"
                             width={70}
                             height={70}
                         />
 
                         <div>
-                            <h4 className='font-semibold'>Nids de poule</h4>
+                            <h4 className='font-semibold'>Accident de voitures</h4>
                             <div className='flex items-center justify-between gap-4'>
                                 <div className='flex items-center text-sm'>
                                     <MapPin className='size-3 text-primary mr-2' />
-                                    12/10/Akassato
+                                    12/10/Abomey
                                 </div>
 
                                 <div className='flex items-center text-sm'>
@@ -175,18 +175,18 @@ const RecentSection = () => {
                     >
                         <Image
                             className="md:block rounded-lg"
-                            src={"/img1.png"}
+                            src={"/camion.png"}
                             alt="Hero Image"
                             width={70}
                             height={70}
                         />
 
                         <div>
-                            <h4 className='font-semibold'>Nids de poule</h4>
+                            <h4 className='font-semibold'>Camion bloquant la voie</h4>
                             <div className='flex items-center justify-between gap-4'>
                                 <div className='flex items-center text-sm'>
                                     <MapPin className='size-3 text-primary mr-2' />
-                                    12/10/Akassato
+                                    12/10/Natitingou
                                 </div>
 
                                 <div className='flex items-center text-sm'>

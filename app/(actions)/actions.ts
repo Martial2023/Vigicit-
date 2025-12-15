@@ -183,3 +183,28 @@ export async function getReportStats(): Promise<ReportStatProps> {
         throw new Error('Erreur lors de la récupération des statistiques des signalements');
     }
 }
+
+
+type AddCategoryData = {
+    name: string
+    description?: string
+}
+export async function addReportCategory(data: AddCategoryData): Promise<ReportCategoryProps> {
+    try {
+        const connectedUser = await getUser()
+        if(!connectedUser || !connectedUser.role || connectedUser.role !== 'ADMIN'){
+            throw new Error("Utilisateur non autorisé");
+        }
+
+        const category = await prisma.category.create({
+            data: {
+                name: data.name,
+                description: data.description || null
+            }
+        })
+        return category
+    } catch (error) {
+        console.log("Erreur lors de l'ajout de la catégorie de signalement :", error);
+        throw new Error("Erreur lors de l'ajout de la catégorie de signalement");
+    }
+}

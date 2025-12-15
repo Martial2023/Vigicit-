@@ -58,3 +58,9 @@ export interface ReportStatProps {
         [key in ReportStatusProps]: number;
     };
 }
+
+export interface ReportCategoryProps {
+    id: string;
+    name: string;
+    description: string | null;
+}

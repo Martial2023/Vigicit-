@@ -40,6 +40,7 @@ import {
     ChevronLeft,
     ChevronRight
 } from 'lucide-react'
+import AddCategoryForm from '@/components/AddCategoryForm'
 
 const statusConfig: Record<ReportStatusProps, { label: string; color: string }> = {
     SUBMITTED: { label: 'Soumis', color: 'bg-blue-500 hover:bg-blue-600' },
@@ -185,13 +186,19 @@ const DashboardPage = () => {
     }
 
     return (
-        <main className='min-h-screen bg-zinc-50 dark:bg-zinc-950 py-12 px-4 md:px-6 lg:px-8'>
+        <main className='min-h-screen bg-zinc-50 dark:bg-zinc-950 py-16 px-4 md:px-6 lg:px-8'>
             <div className="max-w-7xl mx-auto space-y-8">
                 {/* Header */}
-                <div>
+                <div className='flex flex-col md:flex-row px-4 items-center justify-between gap-3'>
                     <h1 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-white">
                         Tableau de bord administratif
                     </h1>
+
+                    <AddCategoryForm>
+                        <Button className='w-full md:w-auto'>
+                            Ajouter une catégorie
+                        </Button>
+                    </AddCategoryForm>
                 </div>
 
                 {/* Stats Cards */}
