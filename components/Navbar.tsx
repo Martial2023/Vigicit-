@@ -29,28 +29,28 @@ const Navbar = () => {
     },
 
     {
-      label: "Carte",
-      href: "/map",
+      label: "Mes signalements",
+      href: "/my-reports",
       icon: MapIcon,
     },
 
-    {
-      label: "Tableau de bord",
-      href: "/dashboard",
-      icon: ChartNoAxesCombined,
-    },
+    // {
+    //   label: "Tableau de bord",
+    //   href: "/dashboard",
+    //   icon: ChartNoAxesCombined,
+    // },
 
-    {
-      label: "FAQ",
-      href: "/faq",
-      icon: ChartNoAxesGantt,
-    },
+    // {
+    //   label: "FAQ",
+    //   href: "/faq",
+    //   icon: ChartNoAxesGantt,
+    // },
 
-    {
-      label: "Contacts",
-      href: "/contacts",
-      icon: ChartNoAxesCombined,
-    }
+    // {
+    //   label: "Contacts",
+    //   href: "/contacts",
+    //   icon: ChartNoAxesCombined,
+    // }
   ];
 
   useEffect(() => {
@@ -64,7 +64,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full p-2 md:px-[10%] flex items-center justify-between fixed z-5000 top-0 left-0 bg-white dark:bg-zinc-950">
-      <Link href="/home" className="flex items-center space-x-2">
+      <Link href="/" className="flex items-center space-x-2">
         <h2 className="text-2xl font-bold flex items-center gap-1">
           <BellRing className='size-5 text-primary dark:text-white'/>
           <span className="text-primary dark:text-white">Vigicité</span>
