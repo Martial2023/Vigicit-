@@ -6,7 +6,7 @@ import { customSession } from "better-auth/plugins";
 import prisma from "./prisma";
 
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000", "https://klarna-ruby.vercel.app"],
+  trustedOrigins: ["http://localhost:3000"],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
