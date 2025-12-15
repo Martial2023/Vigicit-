@@ -38,7 +38,7 @@ const RegisterForm = ({
                 email,
                 name: email,
                 password,
-                callbackURL: '/',
+                callbackURL: '/my-reports',
                 fetchOptions: {
                     onResponse: () => {
                         setLoading(false)
@@ -50,7 +50,7 @@ const RegisterForm = ({
                         toast.error(ctx.error.message)
                     },
                     onSuccess: async () => {
-                        router.push("/")
+                        router.push("/my-reports")
                     }
                 }
             })
@@ -87,7 +87,7 @@ const RegisterForm = ({
                             <div className="flex flex-col items-center text-center">
                                 <h1 className="text-2xl font-bold">Inscription</h1>
                                 <p className="text-balance text-muted-foreground">
-                                    Créer un compte Klarna
+                                    Créer un compte Vigicité
                                 </p>
                             </div>
                             <div className="grid gap-2">
@@ -151,7 +151,7 @@ const RegisterForm = ({
                                             setIsSignupWithGoogle(true)
                                             await signIn.social({
                                                 provider: "google",
-                                                callbackURL: "/"
+                                                callbackURL: "/my-reports"
                                             })
                                         }}
                                         disabled={loading}
@@ -170,7 +170,7 @@ const RegisterForm = ({
                     </div>
                     <div className="relative hidden bg-muted md:block">
                         <img
-                            src="/img.jpg"
+                            src="/img2.png"
                             alt="Image"
                             className="absolute inset-0 h-full w-full object-cover"
                         />

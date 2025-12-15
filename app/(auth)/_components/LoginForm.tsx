@@ -34,7 +34,7 @@ const LoginForm = ({
                             <div className="flex flex-col items-center text-center">
                                 <h1 className="text-2xl font-bold">Connexion</h1>
                                 <p className="text-balance text-muted-foreground">
-                                    Se connecter à Lenoham' Sneakers
+                                    Se connecter à Vigicité
                                 </p>
                             </div>
                             <div className="grid gap-2">
@@ -87,7 +87,7 @@ const LoginForm = ({
                                                 setIsSigninWithEmail(false)
                                             },
                                             onSuccess: () => {
-                                                router.push('/')
+                                                router.push('/my-reports')
                                             }
                                         }
                                     )
@@ -130,7 +130,7 @@ const LoginForm = ({
                     </div>
                     <div className="relative hidden bg-muted md:block">
                         <img
-                            src="/img_dark.jpg"
+                            src="/img2.png"
                             alt="Image"
                             className="absolute inset-0 h-full w-full object-cover"
                         />
